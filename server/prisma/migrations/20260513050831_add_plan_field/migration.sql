@@ -1,0 +1,12 @@
+-- CreateEnum
+CREATE TYPE "UserPlan" AS ENUM ('FREE', 'PRO');
+
+-- AlterTable
+ALTER TABLE "Client" ADD COLUMN     "defaultHourlyRate" DOUBLE PRECISION NOT NULL DEFAULT 80;
+
+-- AlterTable
+ALTER TABLE "Project" ADD COLUMN     "budget" DOUBLE PRECISION NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "defaultHourlyRate" DOUBLE PRECISION NOT NULL DEFAULT 80,
+ADD COLUMN     "plan" "UserPlan" NOT NULL DEFAULT 'FREE';
