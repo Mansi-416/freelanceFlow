@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const { PrismaClient } = require('@prisma/client');
 const authRoutes = require('./auth');
 const clients = require('./controllers/clients');
@@ -27,9 +28,17 @@ app.use('/time-entries', verifyToken, timeEntries);
 app.use('/invoices', verifyToken, invoices);
 app.use('/dashboard', verifyToken, dashboard);
 
-app.get('/', (req, res) => {
-  res.send({ status: 'ok', message: 'FreelanceFlow API is running' });
-});
+if (process.env.NODE_ENV === 'production') {
+  const clientDist = path.join(__dirname, '..', 'client', 'dist');
+  app.use(express.static(clientDist));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.send({ status: 'ok', message: 'FreelanceFlow API is running' });
+  });
+}
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

@@ -62,6 +62,55 @@ FreelanceFlow is a full-stack freelancer productivity app with client management
   npm start
   ```
 
+## Deployment
+
+1. Build the client for production:
+   ```bash
+   npm run build
+   ```
+
+2. Create a production `.env` file in `server` with:
+   ```env
+   DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/freelanceflow"
+   JWT_SECRET="your-secret-key-here"
+   PORT=4000
+   NODE_ENV=production
+   ```
+
+3. Optionally set the frontend API base URL when your backend runs on a separate host:
+   ```bash
+   VITE_API_BASE="https://your-api.example.com"
+   ```
+   If the backend is served from the same origin, the app will use `/api` by default.
+
+4. Start the production server from the workspace root:
+   ```bash
+   npm start
+   ```
+
+When `NODE_ENV=production`, the backend serves the built frontend from `client/dist`.
+
+## Render deployment
+
+Render can deploy this repo as a single full-stack service.
+
+1. Push your code to GitHub.
+2. In Render, create a new Web Service and connect your GitHub repo.
+3. Use these settings:
+   - Environment: `Node`
+   - Branch: `main`
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npm start`
+   - Root Directory: `/`
+4. Add Render environment variables:
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - `PORT` (Render already provides a port, but you can set it explicitly if desired)
+   - `NODE_ENV=production`
+5. Save and deploy.
+
+You can also use the included `render.yaml` manifest to let Render auto-configure the service from the repo.
+
 ## Seeded account
 
 - Email: `alex@freelanceflow.test`
