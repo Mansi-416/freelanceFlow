@@ -6,7 +6,7 @@
     "dev:client": "npm --prefix client run dev",
     "dev:server": "npm --prefix server run dev",
     "build": "npm --prefix client run build",
-    "start": "npm run build && npm --prefix server run prisma:generate && npm --prefix server start",
+    "start": "npm run build && npm --prefix server run prisma:generate && npx prisma migrate deploy --schema=server/prisma/schema.prisma && npm --prefix server start",
     "postinstall": "npm --prefix server run prisma:generate"
   },
   "devDependencies": {
