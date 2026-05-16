@@ -111,6 +111,35 @@ Render can deploy this repo as a single full-stack service.
 
 You can also use the included `render.yaml` manifest to let Render auto-configure the service from the repo.
 
+## Railway deployment
+
+Railway can deploy this repo as a single full-stack service.
+
+1. Push your code to GitHub.
+2. On Railway, click "New Project" → "Deploy from GitHub" and select the `FreelanceFlow` repo.
+3. Add a Postgres plugin from Railway's dashboard and copy the connection string.
+4. Set environment variables in Railway:
+   - `DATABASE_URL` (from Postgres plugin)
+   - `JWT_SECRET` (any strong secret)
+   - `NODE_ENV=production`
+   - Optional: `VITE_API_BASE` (only if frontend calls a separate API; leave blank otherwise)
+5. Configure deployment settings:
+   - Root directory: `/`
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npm start`
+6. After deploy, run Prisma migrations in Railway's shell:
+   ```bash
+   npx prisma migrate deploy --schema=server/prisma/schema.prisma
+   npm --prefix server run seed
+   ```
+7. Verify the public Railway URL loads the frontend.
+
+**Troubleshooting:** If you see "not found", ensure:
+- `NODE_ENV=production` is set
+- `npm run build` completed (check Railway build logs)
+- `DATABASE_URL` is correct and the database is connected
+- Restart the deployment after fixing env vars
+
 ## Seeded account
 
 - Email: `alex@freelanceflow.test`
