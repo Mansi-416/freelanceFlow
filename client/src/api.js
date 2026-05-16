@@ -1,4 +1,4 @@
-http://localhost:5173/const API_BASE = import.meta.env.VITE_API_BASE || '/api';
+const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 function getAuthHeaders(token) {
   return token ? { Authorization: `Bearer ${token}` } : {};
