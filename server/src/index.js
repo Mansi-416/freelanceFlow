@@ -44,7 +44,27 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(indexPath, (err) => {
       if (err) {
         console.error(`[ERROR] Failed to send index.html: ${err.message}`);
-        res.status(500).send('Error loading app');
+        try {
+          const fs = require('fs');
+          const rootDir = path.join(__dirname, '..', '..');
+          const clientDir = path.join(rootDir, 'client');
+          const clientDistDir = path.join(clientDir, 'dist');
+          
+          let debugInfo = {
+            error: err.message,
+            __dirname: __dirname,
+            indexPath: indexPath,
+            rootDirExists: fs.existsSync(rootDir),
+            clientDirExists: fs.existsSync(clientDir),
+            clientDistExists: fs.existsSync(clientDistDir),
+            rootDirContents: fs.existsSync(rootDir) ? fs.readdirSync(rootDir) : [],
+            clientDirContents: fs.existsSync(clientDir) ? fs.readdirSync(clientDir) : [],
+            clientDistContents: fs.existsSync(clientDistDir) ? fs.readdirSync(clientDistDir) : []
+          };
+          res.status(500).json(debugInfo);
+        } catch (e) {
+          res.status(500).send(`Error loading app. Debug failed: ${e.message}`);
+        }
       }
     });
   });
