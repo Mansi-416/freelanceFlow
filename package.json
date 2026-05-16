@@ -5,8 +5,8 @@
     "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
     "dev:client": "npm --prefix client run dev",
     "dev:server": "npm --prefix server run dev",
-    "build": "npm --prefix client run build",
-    "start": "npm run build && npm --prefix server run prisma:generate && npm --prefix server run prisma:migrate && npm --prefix server start",
+    "build": "npm --prefix client run build && npm --prefix server run prisma:generate",
+    "start": "npm --prefix server run prisma:migrate && npm --prefix server start",
     "postinstall": "npm --prefix server run prisma:generate"
   },
   "devDependencies": {
