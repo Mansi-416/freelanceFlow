@@ -7,7 +7,7 @@
     "dev:server": "npm --prefix server run dev",
     "build": "npm --prefix client run build && npm --prefix server run prisma:generate",
     "start": "npm --prefix server run prisma:migrate || echo 'Database migration failed or skipped' && npm --prefix server start",
-    "postinstall": "npm --prefix server run prisma:generate"
+    "postinstall": "npm run build"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
