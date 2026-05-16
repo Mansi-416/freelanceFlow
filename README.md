@@ -134,11 +134,45 @@ Railway can deploy this repo as a single full-stack service.
    ```
 7. Verify the public Railway URL loads the frontend.
 
-**Troubleshooting:** If you see "not found", ensure:
-- `NODE_ENV=production` is set
-- `npm run build` completed (check Railway build logs)
-- `DATABASE_URL` is correct and the database is connected
-- Restart the deployment after fixing env vars
+### Troubleshooting Railway "not found" errors
+
+If you see "not found" after deployment:
+
+1. **Check Railway build logs:**
+   - Open the Railway service → Deployments
+   - Verify `npm run build` completed successfully (no errors)
+   - Confirm `client/dist/index.html` exists in the build output
+
+2. **Verify environment variables:**
+   - Ensure `NODE_ENV=production` is set in Railway env vars
+   - The server will only serve static files when `NODE_ENV === 'production'`
+
+3. **Check the health endpoint (before accessing the app):**
+   - Visit `https://your-railway-url.onrailway.app/api/health`
+   - If you see `{"status":"ok","message":"...","env":"production"}`, the server is running correctly
+   - If `env` shows `undefined`, `NODE_ENV` is not set
+
+4. **Restart the deployment:**
+   - After setting or fixing `NODE_ENV`, manually redeploy from Railway dashboard
+   - Wait for the build and deployment to complete
+
+5. **Check Railway logs for errors:**
+   - In Railway → Logs, search for `[ERROR]` or `[PRODUCTION MODE]`
+   - If you see errors about missing files, the dist folder may not have been built
+
+6. **Verify the build command works locally:**
+   ```bash
+   npm install
+   npm run build
+   ls client/dist/index.html  # should exist
+   npm start
+   ```
+   Then visit `http://localhost:4000` — it should load the frontend.
+
+If issues persist:
+- Double-check that all files were pushed to GitHub (`git log` to see commits)
+- Manually trigger a redeploy from Railway after confirming changes are on GitHub
+- Check if there are any build errors in the Railway logs
 
 ## Seeded account
 

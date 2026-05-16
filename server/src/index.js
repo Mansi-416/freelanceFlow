@@ -28,13 +28,28 @@ app.use('/time-entries', verifyToken, timeEntries);
 app.use('/invoices', verifyToken, invoices);
 app.use('/dashboard', verifyToken, dashboard);
 
+// Health check endpoint (always available)
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'FreelanceFlow API is running', env: process.env.NODE_ENV });
+});
+
 if (process.env.NODE_ENV === 'production') {
   const clientDist = path.join(__dirname, '..', '..', 'client', 'dist');
+  console.log(`[PRODUCTION MODE] Serving static files from: ${clientDist}`);
   app.use(express.static(clientDist));
   app.get('*', (req, res) => {
-    res.sendFile(path.join(clientDist, 'index.html'));
+    console.log(`[ROUTER] Catch-all route hit for: ${req.path}`);
+    const indexPath = path.join(clientDist, 'index.html');
+    console.log(`[ROUTER] Sending index.html from: ${indexPath}`);
+    res.sendFile(indexPath, (err) => {
+      if (err) {
+        console.error(`[ERROR] Failed to send index.html: ${err.message}`);
+        res.status(500).send('Error loading app');
+      }
+    });
   });
 } else {
+  console.log('[DEVELOPMENT MODE]');
   app.get('/', (req, res) => {
     res.send({ status: 'ok', message: 'FreelanceFlow API is running' });
   });
