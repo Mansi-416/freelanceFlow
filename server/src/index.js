@@ -20,13 +20,13 @@ app.use(cors());
 app.use(express.json());
 app.set('prisma', prisma);
 
-app.use('/auth', authRoutes);
-app.use('/clients', verifyToken, clients);
-app.use('/projects', verifyToken, projects);
-app.use('/tasks', verifyToken, tasks);
-app.use('/time-entries', verifyToken, timeEntries);
-app.use('/invoices', verifyToken, invoices);
-app.use('/dashboard', verifyToken, dashboard);
+app.use('/api/auth', authRoutes);
+app.use('/api/clients', verifyToken, clients);
+app.use('/api/projects', verifyToken, projects);
+app.use('/api/tasks', verifyToken, tasks);
+app.use('/api/time-entries', verifyToken, timeEntries);
+app.use('/api/invoices', verifyToken, invoices);
+app.use('/api/dashboard', verifyToken, dashboard);
 
 // Health check endpoint (always available)
 app.get('/api/health', (req, res) => {
